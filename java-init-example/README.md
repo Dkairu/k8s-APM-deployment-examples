@@ -6,7 +6,7 @@ using Env variables i.e
 
 The sleep.sh is a small script to copy the downloaded java agent contents from the container downloading the Java agent to a shared mounted volume /usr/local/newrelic/
 
-You can use any directory in the app container where the New Relic agents will copied to, in this example I used /home/gradle/project/newrelic/ which will be created and mounted.
+You can use any directory in the app container where the New Relic agents will be copied to, in this example I used /home/gradle/project/newrelic/ which will be created and mounted.
 
 After you run the yaml you should see your app in NewRelic UI 
 
