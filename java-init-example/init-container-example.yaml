@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  springappi
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app:  javaspringappi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: springappi
+  name: springappi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: springappi
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: springappi
+        app: javaspringappi
+    spec:
+      volumes:
+      - name: shared-data
+        emptyDir: {}    
+      containers:
+      - image: < ADD JAVA APP IMAGE LOCATION>
+        name: springappi
+        ports:
+        - containerPort: 8080   
+        env: 
+        - name: NEW_RELIC_APP_NAME
+          value: "HELLO FROM INIT APP"
+        - name: NEW_RELIC_LICENSE_KEY
+          value: "<LICENSE KEY>"   
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/home/gradle/project/newrelic/newrelic.jar"                  
+        volumeMounts:
+        - name: shared-data
+          mountPath: /home/gradle/project/newrelic/
+        resources: {}
+      initContainers:  
+      - image: <SEE DOCKERFILE FOR THE NRAGENTJAVA IMAGE>/nragentjava:latest
+        name: nragentjava
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: shared-data
+          mountPath: /usr/local/newrelic/
+        resources: {}
+status: {}

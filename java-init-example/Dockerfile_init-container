@@ -1,0 +1,13 @@
+FROM alpine
+
+RUN mkdir -p /java/latest /usr/local/newrelic
+
+WORKDIR /java/latest
+
+ADD https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip /java/latest/newrelic-java.zip
+
+RUN unzip /java/latest/newrelic-java.zip -d /java/latest/
+
+ADD sleep.sh /usr/local/sleep.sh
+
+CMD ["/bin/sh","/usr/local/sleep.sh"]
